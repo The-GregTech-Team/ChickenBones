@@ -1,0 +1,46 @@
+group = "codechicken" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "CodeChickenCore"
+
+dependencies {
+    compile project(":CodeChickenLib")
+}
+
+version =  "${project.config.mod_version}." + System.getenv("BUILD_NUMBER") ?: "1"
+def commonManifest = {
+    attributes 'FMLCorePlugin': 'codechicken.core.launch.CodeChickenCorePlugin'
+}
+
+jar {
+    classifier = 'universal'
+    manifest commonManifest
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.java
+    classifier = 'src'
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+    manifest commonManifest
+}
+
+// Tell the artifact system about our extra jars
+artifacts {
+    archives sourceJar, devJar
+}
+
+// Configure an upload task.
+uploadArchives {
+    dependsOn 'reobf'
+	if (project.hasProperty("local_maven")) {
+		repositories {
+			logger.info('Publishing to local maven repo')
+
+			mavenDeployer {
+				repository(url: "file://${local_maven}")
+			}
+		}
+	}
+}

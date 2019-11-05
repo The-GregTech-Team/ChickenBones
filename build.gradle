@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+allprojects {
+	apply plugin: 'forge'
+	apply plugin: 'idea'
+
+    sourceCompatibility = targetCompatibility = "1.8"
+
+    // Define properties file
+    ext.configFile = file "$projectDir/build.properties"
+
+    configFile.withReader {
+        // Load config.  It shall from now be referenced as simply config or project.config
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.config = new ConfigSlurper().parse prop
+    }
+
+    processResources {
+        //redo task if any of these properties change
+        inputs.property "version", project.version
+        inputs.property "mc_version", config.mc_version
+
+        // Replace properties in info files
+        from(sourceSets.main.resources.srcDirs) {
+            include '*.info'
+            expand 'version':project.version,'mc_version':config.mc_version
+        }
+
+        // Move access transformer to META-INF
+        rename '(.+_at.cfg)', 'META-INF/$1'
+    }
+
+    minecraft {
+        version = "1.7.10-10.13.4.1614-1.7.10"
+        runDir = "run"
+        mappings = "stable_12"
+    }
+}
+
+task copyFiles(type: Copy, dependsOn: subprojects.jar) {
+   from(subprojects.jar)
+   into project.file('dest')
+}
