@@ -6,11 +6,11 @@ import net.minecraft.world.World;
 
 public class EntityUpdateHook extends Entity
 {
-    public static interface IUpdateCallback
+    public interface IUpdateCallback
     {
-        public void onUpdate();
+        void onUpdate();
 
-        public boolean isValid();
+        boolean isValid();
     }
     
     public final IUpdateCallback callback;

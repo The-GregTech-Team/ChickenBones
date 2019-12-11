@@ -11,9 +11,9 @@ import java.util.Map.Entry;
  */
 public class KeyManager
 {
-    public static interface IKeyStateTracker
+    public interface IKeyStateTracker
     {
-        public void tickKeyStates();
+        void tickKeyStates();
     }
     
     public static class KeyState

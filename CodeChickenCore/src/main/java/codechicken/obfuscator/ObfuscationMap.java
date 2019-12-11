@@ -277,39 +277,34 @@ public class ObfuscationMap
     {
         log.out().println("Parsing "+srgs.getName());
         
-        Function<String, Void> function = new Function<String, Void>()
-        {
-            @Override
-            public Void apply(String line)
+        Function<String, Void> function = line -> {
+            int hpos = line.indexOf('#');
+            if(hpos > 0)
+                line = line.substring(0, hpos).trim();
+            if(line.startsWith("CL: "))
             {
-                int hpos = line.indexOf('#');
-                if(hpos > 0)
-                    line = line.substring(0, hpos).trim();
-                if(line.startsWith("CL: "))
-                {
-                    String[] params = splitLast(line.substring(4), ' ');
-                    addClass(params[0], params[1]);
-                }
-                else if(line.startsWith("FD: "))
-                {
-                    String[] params = splitLast(line.substring(4), ' ');
-                    String[] p1 = splitLast(params[0], '/');
-                    String[] p2 = splitLast(params[1], '/');
-                    addField(p1[0], p1[1], 
-                            p2[0], p2[1]);
-                    return null;
-                }
-                else if(line.startsWith("MD: "))
-                {
-                    String[] params = split4(line.substring(4), ' ');
-                    String[] p1 = splitLast(params[0], '/');
-                    String[] p2 = splitLast(params[2], '/');
-                    addMethod(p1[0], p1[1], params[1], 
-                            p2[0], p2[1], params[3]);
-                    return null;
-                }
+                String[] params = splitLast(line.substring(4), ' ');
+                addClass(params[0], params[1]);
+            }
+            else if(line.startsWith("FD: "))
+            {
+                String[] params = splitLast(line.substring(4), ' ');
+                String[] p1 = splitLast(params[0], '/');
+                String[] p2 = splitLast(params[1], '/');
+                addField(p1[0], p1[1],
+                        p2[0], p2[1]);
                 return null;
             }
+            else if(line.startsWith("MD: "))
+            {
+                String[] params = split4(line.substring(4), ' ');
+                String[] p1 = splitLast(params[0], '/');
+                String[] p2 = splitLast(params[2], '/');
+                addMethod(p1[0], p1[1], params[1],
+                        p2[0], p2[1], params[3]);
+                return null;
+            }
+            return null;
         };
         
         ObfuscationRun.processLines(srgs, function);
@@ -319,23 +314,18 @@ public class ObfuscationMap
     {
         log.out().println("Parsing "+csv.getName());
         
-        Function<String, Void> function = new Function<String, Void>()
-        {
-            @Override
-            public Void apply(String line)
+        Function<String, Void> function = line -> {
+            if(line.startsWith("func_") || line.startsWith("field_"))
             {
-                if(line.startsWith("func_") || line.startsWith("field_"))
-                {
-                    int i = line.indexOf(',');
-                    String srg = line.substring(0, i);
-                    int i2 = i+1;
-                    i = line.indexOf(',', i2);
-                    String mcp = line.substring(i2, i);
-                    
-                    addMcpName(srg, mcp);
-                }
-                return null;
+                int i = line.indexOf(',');
+                String srg = line.substring(0, i);
+                int i2 = i+1;
+                i = line.indexOf(',', i2);
+                String mcp = line.substring(i2, i);
+
+                addMcpName(srg, mcp);
             }
+            return null;
         };
         
         ObfuscationRun.processLines(csv, function);

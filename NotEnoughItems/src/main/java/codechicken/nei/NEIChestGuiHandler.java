@@ -19,7 +19,7 @@ public class NEIChestGuiHandler extends INEIGuiAdapter
 
     @Override
     public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
-        return gui instanceof GuiChest ? NEIServerUtils.getRange(0, chestSize(gui)) : Collections.<Integer>emptyList();
+        return gui instanceof GuiChest ? NEIServerUtils.getRange(0, chestSize(gui)) : Collections.emptyList();
     }
 
     @Override

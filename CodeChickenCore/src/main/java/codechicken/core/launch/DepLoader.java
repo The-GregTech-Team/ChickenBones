@@ -97,12 +97,9 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
             setMessageType(JOptionPane.INFORMATION_MESSAGE);
             setMessage(makeProgressPanel());
             setOptions(new Object[]{"Stop"});
-            addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getSource() == Downloader.this && evt.getPropertyName() == VALUE_PROPERTY) {
-                        requestClose("This will stop minecraft from launching\nAre you sure you want to do this?");
-                    }
+            addPropertyChangeListener(evt -> {
+                if (evt.getSource() == Downloader.this && evt.getPropertyName() == VALUE_PROPERTY) {
+                    requestClose("This will stop minecraft from launching\nAre you sure you want to do this?");
                 }
             });
             container = new JDialog(null, "Hello", ModalityType.MODELESS);
@@ -173,14 +170,11 @@ public class DepLoader implements IFMLLoadingPlugin, IFMLCallHook {
 
             ep.setEditable(false);
             ep.setOpaque(false);
-            ep.addHyperlinkListener(new HyperlinkListener() {
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent event) {
-                    try {
-                        if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
-                            Desktop.getDesktop().browse(event.getURL().toURI());
-                    } catch (Exception e) {
-                    }
+            ep.addHyperlinkListener(event -> {
+                try {
+                    if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+                        Desktop.getDesktop().browse(event.getURL().toURI());
+                } catch (Exception e) {
                 }
             });
 

@@ -12,6 +12,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static codechicken.lib.gui.GuiDraw.drawRect;
 
@@ -20,13 +21,13 @@ public class ItemPanel extends Widget
     /**
      * Should not be externally modified, use updateItemList
      */
-    public static ArrayList<ItemStack> items = new ArrayList<>();
+    public static List<ItemStack> items = new ArrayList<>();
     /**
      * Swapped into visible items on update
      */
-    private static ArrayList<ItemStack> _items = items;
+    private static List<ItemStack> _items = items;
 
-    public static void updateItemList(ArrayList<ItemStack> newItems) {
+    public static void updateItemList(List<ItemStack> newItems) {
         _items = newItems;
     }
 

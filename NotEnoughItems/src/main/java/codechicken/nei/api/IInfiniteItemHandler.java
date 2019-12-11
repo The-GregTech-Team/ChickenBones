@@ -11,6 +11,6 @@ public interface IInfiniteItemHandler
     boolean canHandleItem(ItemStack stack);
     boolean isItemInfinite(ItemStack stack);
     
-    public void replenishInfiniteStack(InventoryPlayer inventory, int slotNo);
-    public ItemStack getInfiniteItem(ItemStack typeStack);
+    void replenishInfiniteStack(InventoryPlayer inventory, int slotNo);
+    ItemStack getInfiniteItem(ItemStack typeStack);
 }

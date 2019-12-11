@@ -4,6 +4,7 @@ archivesBaseName = "NotEnoughItems"
 dependencies {
     compile project(":CodeChickenLib")
     compile project(":CodeChickenCore")
+    compile 'it.unimi.dsi:fastutil:8.3.0'
 }
 
 version =  "${project.config.mod_version}." + System.getenv("BUILD_NUMBER") ?: "1"

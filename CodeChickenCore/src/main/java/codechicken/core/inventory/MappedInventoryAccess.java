@@ -9,17 +9,12 @@ import net.minecraft.item.ItemStack;
 
 public class MappedInventoryAccess implements IInventory
 {
-    public static interface InventoryAccessor
+    public interface InventoryAccessor
     {
-        public boolean canAccessSlot(int slot);
+        boolean canAccessSlot(int slot);
     }
 
-    public static final InventoryAccessor fullAccess = new InventoryAccessor()
-    {
-        public boolean canAccessSlot(int slot) {
-            return true;
-        }
-    };
+    public static final InventoryAccessor fullAccess = slot -> true;
 
     private ArrayList<Integer> slotMap = new ArrayList<>();
     private IInventory inv;

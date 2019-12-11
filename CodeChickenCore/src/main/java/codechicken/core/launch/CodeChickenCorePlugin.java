@@ -75,15 +75,11 @@ public class CodeChickenCorePlugin implements IFMLLoadingPlugin, IFMLCallHook
 
             ep.setEditable(false);
             ep.setOpaque(false);
-            ep.addHyperlinkListener(new HyperlinkListener()
-            {
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent event) {
-                    try {
-                        if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
-                            Desktop.getDesktop().browse(event.getURL().toURI());
-                    } catch (Exception ignored) {}
-                }
+            ep.addHyperlinkListener(event -> {
+                try {
+                    if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+                        Desktop.getDesktop().browse(event.getURL().toURI());
+                } catch (Exception ignored) {}
             });
 
             JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);

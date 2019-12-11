@@ -4,6 +4,6 @@ import java.io.PrintStream;
 
 public interface ILogStreams
 {
-    public PrintStream err();
-    public PrintStream out();
+    PrintStream err();
+    PrintStream out();
 }

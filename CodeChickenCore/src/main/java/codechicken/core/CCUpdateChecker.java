@@ -82,18 +82,15 @@ public class CCUpdateChecker
         updateCheck("http://www.chickenbones.net/Files/notification/version.php?" +
                 "version=" + mcVersion() + "&" +
                 "file=" + mod,
-                new Function<String, Void>()
-                {
-                    @Override public Void apply(String ret) {
-                        if (!ret.startsWith("Ret: ")) {
-                            CodeChickenCorePlugin.logger.error("Failed to check update for " + mod + " returned: " + ret);
-                            return null;
-                        }
-                        ComparableVersion newversion = new ComparableVersion(ret.substring(5));
-                        if (newversion.compareTo(new ComparableVersion(version)) > 0)
-                            addUpdateMessage(StatCollector.translateToLocalFormatted("codechickencore.update", newversion, mod));
+                ret -> {
+                    if (!ret.startsWith("Ret: ")) {
+                        CodeChickenCorePlugin.logger.error("Failed to check update for " + mod + " returned: " + ret);
                         return null;
                     }
+                    ComparableVersion newversion = new ComparableVersion(ret.substring(5));
+                    if (newversion.compareTo(new ComparableVersion(version)) > 0)
+                        addUpdateMessage(StatCollector.translateToLocalFormatted("codechickencore.update", newversion, mod));
+                    return null;
                 });
     }
 

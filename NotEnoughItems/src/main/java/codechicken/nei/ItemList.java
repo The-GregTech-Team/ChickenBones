@@ -5,17 +5,16 @@ import codechicken.nei.api.ItemFilter;
 import codechicken.nei.api.ItemFilter.ItemFilterProvider;
 import codechicken.nei.api.ItemInfo;
 import codechicken.nei.guihook.GuiContainerManager;
+import codechicken.nei.suffixtree.GeneralizedSuffixTree;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ItemList
 {
@@ -32,6 +31,7 @@ public class ItemList
      */
     public static final List<ItemFilterProvider> itemFilterers = new LinkedList<>();
     public static final List<ItemsLoadedCallback> loadCallbacks = new LinkedList<>();
+    public static volatile GeneralizedSuffixTree suffixTree = new GeneralizedSuffixTree();
 
     private static HashSet<Item> erroredItems = new HashSet<>();
     private static HashSet<String> stackTraces = new HashSet<>();
@@ -116,9 +116,9 @@ public class ItemList
         }
     }
 
-    public static interface ItemsLoadedCallback
+    public interface ItemsLoadedCallback
     {
-        public void itemsLoaded();
+        void itemsLoaded();
     }
 
     public static boolean itemMatchesAll(ItemStack item, List<ItemFilter> filters) {
@@ -220,6 +220,11 @@ public class ItemList
             for(ItemsLoadedCallback callback : loadCallbacks)
                 callback.itemsLoaded();
 
+            suffixTree = new GeneralizedSuffixTree();
+            for (int i = 0; i < ItemList.items.size(); i++) {
+                suffixTree.put(ItemList.items.get(i).getDisplayName().toLowerCase(), i);
+            }
+
             updateFilter.restart();
         }
     };
@@ -228,7 +233,8 @@ public class ItemList
     {
         @Override
         public void execute() {
-            ArrayList<ItemStack> filtered = new ArrayList<>();
+            /*
+            List<ItemStack> filtered = Collections.synchronizedList(new ArrayList<>());
             ItemFilter filter = getItemListFilter();
             for(ItemStack item : items) {
                 if (interrupted()) return;
@@ -237,6 +243,15 @@ public class ItemList
                     filtered.add(item);
             }
 
+            if(interrupted()) return;
+            ItemSorter.sort(filtered);
+            if(interrupted()) return;
+            ItemPanel.updateItemList(filtered);
+
+             */
+            List<ItemStack> filtered = Collections.synchronizedList(new ArrayList<>());
+            PatternItemFilter filter = (PatternItemFilter) getItemFilters().stream().filter(i -> i instanceof PatternItemFilter).findAny().get();
+            filtered.addAll(suffixTree.search(filter.pattern.pattern()).stream().map(items::get).collect(Collectors.toList()));
             if(interrupted()) return;
             ItemSorter.sort(filtered);
             if(interrupted()) return;

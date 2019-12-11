@@ -127,7 +127,7 @@ public class GuiItemIconDumper extends GuiScreen
     public static String cleanFileName(String name) {
         StringBuilder cleanName = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
-            int c = (int)name.charAt(i);
+            int c = name.charAt(i);
             if (Arrays.binarySearch(illegalChars, c) < 0)
                 cleanName.append((char)c);
             else

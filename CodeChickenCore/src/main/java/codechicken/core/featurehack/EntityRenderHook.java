@@ -6,13 +6,13 @@ import net.minecraft.world.World;
 
 public class EntityRenderHook extends Entity
 {
-    public static interface IRenderCallback
+    public interface IRenderCallback
     {
-        public void render(float frame, int pass);
+        void render(float frame, int pass);
 
-        public boolean shouldRenderInPass(int pass);
+        boolean shouldRenderInPass(int pass);
 
-        public boolean isValid();
+        boolean isValid();
     }
 
     public final IRenderCallback callback;

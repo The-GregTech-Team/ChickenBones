@@ -64,14 +64,7 @@ public class ProfilerRecipeHandler implements ICraftingHandler, IUsageHandler
             if(it.next().name.equals(getRecipeName()))
                 it.remove();
         
-        Collections.sort(results, new Comparator<ProfilerResult>()
-        {
-            @Override
-            public int compare(ProfilerResult o1, ProfilerResult o2)
-            {
-                return o1.time < o2.time ? 1 : -1;
-            }
-        });
+        Collections.sort(results, (o1, o2) -> o1.time < o2.time ? 1 : -1);
         
         for(int i = recipe*6; i < results.size() && i < (recipe+1)*6; i++)
         {

@@ -29,18 +29,18 @@ public class ReflectionManager
         Class<?> primitive = primitiveWrappers.get(class1);
         if(primitive != null)
         {
-            if(primitive == Long.class && Long.class.isInstance(obj))
+            if(primitive == Long.class && obj instanceof Long)
                 return true;
-            if((primitive == Long.class || primitive == Integer.class) && Integer.class.isInstance(obj))
+            if((primitive == Long.class || primitive == Integer.class) && obj instanceof Integer)
                 return true;
-            if((primitive == Long.class || primitive == Integer.class || primitive == Short.class) && Short.class.isInstance(obj))
+            if((primitive == Long.class || primitive == Integer.class || primitive == Short.class) && obj instanceof Short)
                 return true;
-            if((primitive == Long.class || primitive == Integer.class || primitive == Short.class || primitive == Byte.class) && Integer.class.isInstance(obj))
+            if((primitive == Long.class || primitive == Integer.class || primitive == Short.class || primitive == Byte.class) && obj instanceof Integer)
                 return true;
             
-            if(primitive == Double.class && Double.class.isInstance(obj))
+            if(primitive == Double.class && obj instanceof Double)
                 return true;
-            if((primitive == Double.class || primitive == Float.class) && Float.class.isInstance(obj))
+            if((primitive == Double.class || primitive == Float.class) && obj instanceof Float)
                 return true;
             
             return primitive.isInstance(obj);

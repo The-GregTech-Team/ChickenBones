@@ -5,5 +5,5 @@ package codechicken.nei.guihook;
  */
 public interface IGuiHandleMouseWheel
 {
-    public void mouseScrolled(int i);
+    void mouseScrolled(int i);
 }

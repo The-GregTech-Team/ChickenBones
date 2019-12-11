@@ -690,13 +690,10 @@ public class SubsetWidget extends Button implements ItemFilterProvider, ItemsLoa
 
     @Override
     public ItemFilter getFilter() {
-        return new ItemFilter()//synchronise access on hiddenItems
-        {
-            @Override
-            public boolean matches(ItemStack item) {
-                synchronized (hiddenItems) {
-                    return !hiddenItems.matches(item);
-                }
+        //synchronise access on hiddenItems
+        return item -> {
+            synchronized (hiddenItems) {
+                return !hiddenItems.matches(item);
             }
         };
     }

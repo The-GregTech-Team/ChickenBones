@@ -39,8 +39,8 @@ public class NEIClientConfig
             new ConfigFile(new File(configDir, "client.cfg")));
     public static ConfigSet world;
 
-    public static ItemStack creativeInv[];
-    private static boolean statesSaved[] = new boolean[7];
+    public static ItemStack[] creativeInv;
+    private static boolean[] statesSaved = new boolean[7];
 
     public static boolean hasSMPCounterpart;
     public static HashSet<String> permissableActions = new HashSet<>();
@@ -263,12 +263,7 @@ public class NEIClientConfig
 
         configLoaded = true;
 
-        ClassDiscoverer classDiscoverer = new ClassDiscoverer(new IStringMatcher()
-        {
-            public boolean matches(String test) {
-                return test.startsWith("NEI") && test.endsWith("Config.class");
-            }
-        }, IConfigureNEI.class);
+        ClassDiscoverer classDiscoverer = new ClassDiscoverer(test -> test.startsWith("NEI") && test.endsWith("Config.class"), IConfigureNEI.class);
 
         classDiscoverer.findClasses();
 
@@ -495,10 +490,7 @@ public class NEIClientConfig
             return false;
 
         String cmd = getStringSetting("command." + base);
-        if (cmd == null || !cmd.startsWith("/"))
-            return false;
-
-        return true;
+        return cmd != null && cmd.startsWith("/");
     }
 
     private static boolean modePermitsAction(String name) {

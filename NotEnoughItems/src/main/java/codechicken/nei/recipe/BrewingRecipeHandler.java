@@ -155,21 +155,10 @@ public class BrewingRecipeHandler extends TemplateRecipeHandler
         }
         while (!searchPotions.isEmpty());
 
-        API.setItemListEntries(potionitem, Iterables.transform(allPotions, new Function<Integer, ItemStack>()//override with only potions that can be crafted
-        {
-            @Override
-            public ItemStack apply(Integer potionID) {
-                return new ItemStack(potionitem, 1, potionID);
-            }
-        }));
+        //override with only potions that can be crafted
+        API.setItemListEntries(potionitem, Iterables.transform(allPotions, potionID -> new ItemStack(potionitem, 1, potionID)));
         API.addSubset("Items.Potions", new ItemStackSet().with(potionitem));
-        API.addSubset("Items.Potions.Splash", new ItemFilter()
-        {
-            @Override
-            public boolean matches(ItemStack item) {
-                return item.getItem() == potionitem && (item.getMetadata() & 0x4000) != 0;
-            }
-        });
+        API.addSubset("Items.Potions.Splash", item -> item.getItem() == potionitem && (item.getMetadata() & 0x4000) != 0);
 
         ItemStackSet positivepots = new ItemStackSet();
         ItemStackSet negativepots = new ItemStackSet();

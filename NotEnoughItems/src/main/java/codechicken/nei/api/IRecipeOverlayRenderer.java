@@ -5,5 +5,5 @@ import net.minecraft.inventory.Slot;
 
 public interface IRecipeOverlayRenderer
 {
-    public void renderOverlay(GuiContainerManager gui, Slot slot);
+    void renderOverlay(GuiContainerManager gui, Slot slot);
 }

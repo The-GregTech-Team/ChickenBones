@@ -16,7 +16,7 @@ public class PositionedStack
 {    
     public int relx;
     public int rely;
-    public ItemStack items[];
+    public ItemStack[] items;
     //compatibility dummy
     public ItemStack item;
     

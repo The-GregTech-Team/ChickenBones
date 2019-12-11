@@ -11,18 +11,18 @@ import java.util.List;
  */
 public interface INEIGuiHandler
 {
-    public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility);
+    VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility);
     
     /**
      * NEI will give the specified item to the InventoryRange returned if the player's inventory is full.
      * return null for no range
      */
-    public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item);
+    Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item);
     
     /**
      * @return A list of TaggedInventoryAreas that will be used with the savestates.
      */
-    public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui);
+    List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui);
     
     /**
      * Handles clicks while an itemstack has been dragged from the item panel. Use this to set configurable slots and the like. 
@@ -34,7 +34,7 @@ public interface INEIGuiHandler
      * @param button The button presed
      * @return True if the drag n drop was handled. False to resume processing through other routes. The held stack will be deleted if draggedStack.stackSize == 0
      */
-    public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button);
+    boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button);
     
     /**
      * Used to prevent the item panel from drawing on top of other gui elements.
@@ -45,5 +45,5 @@ public interface INEIGuiHandler
      * @param h The h coordinate of the rectangle bounding the slot
      * @return true if the item panel slot within the specified rectangle should not be rendered.
      */
-    public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h);
+    boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h);
 }

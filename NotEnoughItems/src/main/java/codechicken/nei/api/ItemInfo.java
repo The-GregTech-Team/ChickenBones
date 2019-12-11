@@ -2,9 +2,6 @@ package codechicken.nei.api;
 
 import codechicken.core.featurehack.GameDataManipulator;
 import codechicken.nei.*;
-import codechicken.nei.ItemList.EverythingItemFilter;
-import codechicken.nei.ItemList.ItemsLoadedCallback;
-import codechicken.nei.api.ItemFilter.ItemFilterProvider;
 import codechicken.nei.config.ArrayDumper;
 import codechicken.nei.config.ItemPanelDumper;
 import codechicken.nei.config.RegistryDumper;
@@ -47,7 +44,7 @@ import java.util.Map.Entry;
  */
 public class ItemInfo
 {
-    public static enum Layout
+    public enum Layout
     {
         HEADER, BODY, FOOTER
     }
@@ -106,28 +103,11 @@ public class ItemInfo
     }
 
     private static void addSearchOptimisation() {
-        ItemList.loadCallbacks.add(new ItemsLoadedCallback()
-        {
-            @Override public void itemsLoaded() {
-                itemSearchNames.clear();
-            }
-        });
+        ItemList.loadCallbacks.add(itemSearchNames::clear);
     }
 
     private static void addHiddenItemFilter() {
-        API.addItemFilter(new ItemFilterProvider()
-        {
-            @Override
-            public ItemFilter getFilter() {
-                return new ItemFilter()
-                {
-                    @Override
-                    public boolean matches(ItemStack item) {
-                        return !hiddenItems.contains(item);
-                    }
-                };
-            }
-        });
+        API.addItemFilter(() -> item -> !hiddenItems.contains(item));
     }
 
     private static void addIDDumps() {
@@ -313,20 +293,8 @@ public class ItemInfo
     }
 
     private static void addDefaultDropDowns() {
-        API.addSubset("Items", new ItemFilter()
-        {
-            @Override
-            public boolean matches(ItemStack item) {
-                return Block.getBlockFromItem(item.getItem()) == Blocks.air;
-            }
-        });
-        API.addSubset("Blocks", new ItemFilter()
-        {
-            @Override
-            public boolean matches(ItemStack item) {
-                return Block.getBlockFromItem(item.getItem()) != Blocks.air;
-            }
-        });
+        API.addSubset("Items", item -> Block.getBlockFromItem(item.getItem()) == Blocks.air);
+        API.addSubset("Blocks", item -> Block.getBlockFromItem(item.getItem()) != Blocks.air);
         API.addSubset("Blocks.MobSpawners", ItemStackSet.of(Blocks.mob_spawner));
     }
 

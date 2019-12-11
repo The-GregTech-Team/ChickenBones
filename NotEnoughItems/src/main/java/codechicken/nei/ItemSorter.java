@@ -42,9 +42,9 @@ public class ItemSorter implements Comparator<ItemStack>, ItemsLoadedCallback
     //optimisations
     public HashMap<ItemStack, Integer> ordering = null;
 
-    public static void sort(ArrayList<ItemStack> items) {
+    public static void sort(List<ItemStack> items) {
         try {
-            Collections.sort(items, instance);
+            items.sort(instance);
         } catch (Exception e) {
             NEIClientConfig.logger.error("Exception sorting item list", e);
         }
@@ -90,63 +90,39 @@ public class ItemSorter implements Comparator<ItemStack>, ItemsLoadedCallback
 
     public static void initConfig(ConfigTagParent tag) {
         //minecraft, mod, id, default, meta, name
-        API.addSortOption("nei.itemsort.minecraft", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                boolean m1 = "minecraft".equals(ItemInfo.itemOwners.get(o1.getItem()));
-                boolean m2 = "minecraft".equals(ItemInfo.itemOwners.get(o2.getItem()));
-                return m1 == m2 ? 0 : m1 ? -1 : 1;
-            }
+        API.addSortOption("nei.itemsort.minecraft", (o1, o2) -> {
+            boolean m1 = "minecraft".equals(ItemInfo.itemOwners.get(o1.getItem()));
+            boolean m2 = "minecraft".equals(ItemInfo.itemOwners.get(o2.getItem()));
+            return m1 == m2 ? 0 : m1 ? -1 : 1;
         });
-        API.addSortOption("nei.itemsort.mod", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                String mod1 = ItemInfo.itemOwners.get(o1.getItem());
-                String mod2 = ItemInfo.itemOwners.get(o2.getItem());
-                if(mod1 == null) return mod2 == null ? 0 : 1;
-                if(mod2 == null) return -1;
-                return mod1.compareTo(mod2);
-            }
+        API.addSortOption("nei.itemsort.mod", (o1, o2) -> {
+            String mod1 = ItemInfo.itemOwners.get(o1.getItem());
+            String mod2 = ItemInfo.itemOwners.get(o2.getItem());
+            if(mod1 == null) return mod2 == null ? 0 : 1;
+            if(mod2 == null) return -1;
+            return mod1.compareTo(mod2);
         });
-        API.addSortOption("nei.itemsort.id", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                int id1 = Item.getIdFromItem(o1.getItem());
-                int id2 = Item.getIdFromItem(o2.getItem());
-                return compareInt(id1, id2);
-            }
+        API.addSortOption("nei.itemsort.id", (o1, o2) -> {
+            int id1 = Item.getIdFromItem(o1.getItem());
+            int id2 = Item.getIdFromItem(o2.getItem());
+            return compareInt(id1, id2);
         });
-        API.addSortOption("nei.itemsort.default", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                Integer order1 = instance.ordering.get(o1);
-                Integer order2 = instance.ordering.get(o2);
-                if(order1 == null) return order2 == null ? 0 : 1;
-                if(order2 == null) return -1;
-                return compareInt(order1, order2);
-            }
+        API.addSortOption("nei.itemsort.default", (o1, o2) -> {
+            Integer order1 = instance.ordering.get(o1);
+            Integer order2 = instance.ordering.get(o2);
+            if(order1 == null) return order2 == null ? 0 : 1;
+            if(order2 == null) return -1;
+            return compareInt(order1, order2);
         });
-        API.addSortOption("nei.itemsort.damage", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                int id1 = o1.getMetadata();
-                int id2 = o2.getMetadata();
-                return compareInt(id1, id2);
-            }
+        API.addSortOption("nei.itemsort.damage", (o1, o2) -> {
+            int id1 = o1.getMetadata();
+            int id2 = o2.getMetadata();
+            return compareInt(id1, id2);
         });
-        API.addSortOption("nei.itemsort.name", new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2) {
-                String name1 = ItemInfo.getSearchName(o1);
-                String name2 = ItemInfo.getSearchName(o2);
-                return name1.compareTo(name2);
-            }
+        API.addSortOption("nei.itemsort.name", (o1, o2) -> {
+            String name1 = ItemInfo.getSearchName(o1);
+            String name2 = ItemInfo.getSearchName(o2);
+            return name1.compareTo(name2);
         });
         tag.getTag("inventory.itemsort").setDefaultValue(getSaveString(list));
         API.addOption(new OptionOpenGui("inventory.itemsort", GuiItemSorter.class) {

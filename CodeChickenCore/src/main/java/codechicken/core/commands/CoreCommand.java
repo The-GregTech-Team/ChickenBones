@@ -132,10 +132,7 @@ public abstract class CoreCommand implements ICommand
         if (OPOnly()) {
             if (var1 instanceof EntityPlayer)
                 return MinecraftServer.getServer().getConfigurationManager().canSendCommands(((EntityPlayer) var1).getGameProfile());
-            else if (var1 instanceof MinecraftServer)
-                return true;
-            else
-                return false;
+            else return var1 instanceof MinecraftServer;
         }
         return true;
     }

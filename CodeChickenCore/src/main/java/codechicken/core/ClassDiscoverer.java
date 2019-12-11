@@ -40,10 +40,7 @@ public class ClassDiscoverer
     }
 
     public ClassDiscoverer(Class<?>... superclasses) {
-        this(new IStringMatcher()
-        {
-            public boolean matches(String test) {return true;}
-        }, superclasses);
+        this(test -> true, superclasses);
     }
 
     public ArrayList<Class<?>> findClasses() {

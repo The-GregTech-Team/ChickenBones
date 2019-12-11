@@ -10,5 +10,5 @@ import java.util.ArrayList;
  */
 public interface IStackPositioner
 {
-    public ArrayList<PositionedStack> positionStacks(ArrayList<PositionedStack> ai);
+    ArrayList<PositionedStack> positionStacks(ArrayList<PositionedStack> ai);
 }
