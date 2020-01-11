@@ -51,7 +51,7 @@ public class SearchField extends TextField implements ItemFilterProvider
 
     public static List<ISearchProvider> searchProviders = new LinkedList<>();
 
-    long lastclicktime;
+    public long lastclicktime;
 
     public SearchField(String ident) {
         super(ident);

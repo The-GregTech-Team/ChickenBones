@@ -15,7 +15,7 @@ public class ContainerCreativeInv extends Container
 {
     private class SlotArmor extends Slot
     {
-        int armorType;
+        public int armorType;
 
         public SlotArmor(IInventory inv, int x, int y, int slot, int armor) {
             super(inv, x, y, slot);

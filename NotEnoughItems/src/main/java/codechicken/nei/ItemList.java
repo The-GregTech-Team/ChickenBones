@@ -14,7 +14,6 @@ import net.minecraft.util.IIcon;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ItemList
 {
@@ -233,7 +232,6 @@ public class ItemList
     {
         @Override
         public void execute() {
-            /*
             List<ItemStack> filtered = Collections.synchronizedList(new ArrayList<>());
             ItemFilter filter = getItemListFilter();
             for(ItemStack item : items) {
@@ -243,15 +241,6 @@ public class ItemList
                     filtered.add(item);
             }
 
-            if(interrupted()) return;
-            ItemSorter.sort(filtered);
-            if(interrupted()) return;
-            ItemPanel.updateItemList(filtered);
-
-             */
-            List<ItemStack> filtered = Collections.synchronizedList(new ArrayList<>());
-            PatternItemFilter filter = (PatternItemFilter) getItemFilters().stream().filter(i -> i instanceof PatternItemFilter).findAny().get();
-            filtered.addAll(suffixTree.search(filter.pattern.pattern()).stream().map(items::get).collect(Collectors.toList()));
             if(interrupted()) return;
             ItemSorter.sort(filtered);
             if(interrupted()) return;

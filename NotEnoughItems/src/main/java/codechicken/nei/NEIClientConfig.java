@@ -365,7 +365,10 @@ public class NEIClientConfig
     }
 
     public static String getSearchExpression() {
-        return world.nbt.getString("search");
+        if (world != null && world.nbt != null)
+            return world.nbt.getString("search");
+        else
+            return "";
     }
 
     public static void setSearchExpression(String expression) {
